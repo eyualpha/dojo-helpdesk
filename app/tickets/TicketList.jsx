@@ -1,5 +1,11 @@
+import Link from "next/link";
+
 async function getTickets() {
-  const res = await fetch("http://localhost:4000/tickets");
+  const res = await fetch("http://localhost:4000/tickets", {
+    next: {
+      revalidate: 0,
+    },
+  });
   return await res.json();
 }
 
@@ -10,11 +16,13 @@ async function TicketList() {
       {tickets.map((ticket) => {
         return (
           <div className="card my-5" key={ticket.id}>
-            <h3>{ticket.title}</h3>
-            <p>{ticket.body.slice(0, 200)}...</p>
-            <div className={` pill ${ticket.priority}`}>
-              {ticket.priority} priority
-            </div>
+            <Link href={`/tickets/${ticket.id}`}>
+              <h3>{ticket.title}</h3>
+              <p>{ticket.body.slice(0, 200)}...</p>
+              <div className={` pill ${ticket.priority}`}>
+                {ticket.priority} priority
+              </div>
+            </Link>
           </div>
         );
       })}
